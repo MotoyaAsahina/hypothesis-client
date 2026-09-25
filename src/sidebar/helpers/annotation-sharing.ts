@@ -2,9 +2,14 @@ import type { SidebarSettings } from '../../types/config';
 import { serviceConfig } from '../config/service-config';
 
 /**
- * Generate a URI for sharing: a bouncer link built to share annotations in
- * a specific group (groupID) on a specific document (documentURI). If the
- * `documentURI` provided is not a web-accessible URL, no link is generated.
+ * Generate a URI for sharing the annotations in a specific group (groupId) on
+ * a specific document (documentURI).
+ *
+ * This is a link to the document itself with an `#annotations:group:<groupId>`
+ * fragment, which the client reads on load to focus that group. It doesn't go
+ * through a bouncer (hyp.is), which would send the document URL and group ID
+ * to a third party. If the `documentURI` provided is not a web-accessible URL,
+ * no link is generated.
  */
 export function pageSharingLink(
   documentURI: string,
@@ -13,9 +18,10 @@ export function pageSharingLink(
   if (!isShareableURI(documentURI)) {
     return null;
   }
-  return `https://hyp.is/go?url=${encodeURIComponent(
-    documentURI,
-  )}&group=${groupId}`;
+  // The client only recognizes the fragment at the end of the URL, so replace
+  // any fragment the document URI already has.
+  const [uriWithoutFragment] = documentURI.split('#');
+  return `${uriWithoutFragment}#annotations:group:${groupId}`;
 }
 
 /**

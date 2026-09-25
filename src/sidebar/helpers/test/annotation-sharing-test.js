@@ -18,10 +18,35 @@ describe('sidebar/helpers/annotation-sharing', () => {
   });
 
   describe('pageSharingLink', () => {
-    it('generates a bouncer link based on the document URI and group id', () => {
-      assert.equal(
+    [
+      {
+        documentURI: 'https://www.example.com',
+        expected: 'https://www.example.com#annotations:group:testprivate',
+      },
+      {
+        documentURI: 'https://www.example.com/page.html?q=1',
+        expected:
+          'https://www.example.com/page.html?q=1#annotations:group:testprivate',
+      },
+      // An existing fragment is replaced.
+      {
+        documentURI: 'https://www.example.com/page.html#section',
+        expected:
+          'https://www.example.com/page.html#annotations:group:testprivate',
+      },
+    ].forEach(({ documentURI, expected }) => {
+      it('links to the document with a group fragment', () => {
+        assert.equal(
+          sharingUtil.pageSharingLink(documentURI, 'testprivate'),
+          expected,
+        );
+      });
+    });
+
+    it('does not link to a bouncer', () => {
+      assert.notInclude(
         sharingUtil.pageSharingLink('https://www.example.com', 'testprivate'),
-        'https://hyp.is/go?url=https%3A%2F%2Fwww.example.com&group=testprivate',
+        'hyp.is',
       );
     });
 
