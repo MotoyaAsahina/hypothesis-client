@@ -95,10 +95,6 @@ function HelpPanel({ session, settings }: HelpPanelProps) {
     );
   }, [profile, displayName, frames, mainFrame]);
 
-  // The support ticket URL encodes some version info in it to pre-fill in the
-  // create-new-ticket form
-  const supportTicketURL = `https://web.hypothes.is/get-help/?sys_info=${versionData.asEncodedURLString()}`;
-
   const onActiveChanged = useCallback(
     (active: boolean) => {
       if (!active && hasAutoDisplayPreference) {
@@ -175,7 +171,6 @@ function HelpPanel({ session, settings }: HelpPanelProps) {
             linkText="Help topics"
             url="https://web.hypothes.is/help/"
           />
-          <HelpPanelTab linkText="New support ticket" url={supportTicketURL} />
         </div>
       </Card>
     </SidebarPanel>

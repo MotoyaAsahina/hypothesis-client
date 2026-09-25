@@ -170,13 +170,13 @@ describe('HelpPanel', () => {
       );
     });
 
-    it('should render dynamic link to create a new help ticket', () => {
+    it('should not render a link that sends version info to a support site', () => {
       const wrapper = createComponent();
       const helpTab = wrapper
         .find('HelpPanelTab')
         .filter({ linkText: 'New support ticket' });
-      assert.isTrue(helpTab.exists());
-      assert.include(helpTab.prop('url'), 'fakeURLString');
+      assert.isFalse(helpTab.exists());
+      assert.equal(wrapper.find('HelpPanelTab').length, 1);
     });
   });
 
