@@ -56,6 +56,10 @@ COPY --from=build --chown=101:101 /out/hypothesis /usr/share/nginx/html/hypothes
 COPY docker/nginx.conf /etc/nginx/conf.d/default.conf
 COPY --chmod=0755 docker/render-boot-script.sh /docker-entrypoint.d/40-render-boot-script.sh
 
+# The BSD license requires binary redistributions to carry the copyright
+# notice. It is kept outside the web root so that it is not served.
+COPY LICENSE /usr/share/licenses/hypothesis-client/LICENSE
+
 EXPOSE 8080
 
 HEALTHCHECK --interval=30s --timeout=3s \
